@@ -22,13 +22,18 @@
 
       <form action="{{ route('cidade.update', $dados['id']) }}" method="POST">
          @csrf
+         @method('PUT')
 
          <div class="my-4">
             <input class="form-control" type='text' name='nome' placeholder="NOME" value='{{$dados['nome']}}'>
          </div>
          <div class="mb-4">
-            <input class="form-control" type='text' name='porte' placeholder="PORTE" value='{{$dados['porte']}}'>
-
+            <select class="form-select" name='porte' aria-label="Default select example">
+               <option value="" disabled selected>Portes</option>
+               <option value="1">Pequeno</option>
+               <option value="2">Médio</option>
+               <option value="3">Grande</option>
+            </select>
          </div>
 
          <input class="btn btn-success" type="submit" value="Salvar">

@@ -9,7 +9,7 @@ class CidadeController extends Controller
     public $cidades = [[
         'id' => 1,
         'nome'  => 'Matinhos',
-        'porte' => 'gil@gil.com'
+        'porte' => 'pequeno'
     ]];
     /**
      * Display a listing of the resource.
@@ -65,11 +65,20 @@ class CidadeController extends Controller
         }
 
         // Array com os dados do novo cadastro
+
+        if ($request->porte == 1) {
+            $porte = 'Pequeno';
+        } else if ($request->porte == 2) {
+            $porte = 'Médio';
+        } else {
+            $porte = 'Grande';
+        }
         $novo = [
             'id' => $new_id,
             'nome' => $request->nome,
-            'porte' => $request->porte
+            'porte' => $porte
         ];
+
 
         // Insere novo cadastro no array
         array_push($aux, $novo);
@@ -130,23 +139,32 @@ class CidadeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $alterado = [
-            'id' => $id,
-            'nome' => $request->nome,
-            'porte' => $request->porte
-        ];
 
-        // Obtém os dados da variável de sessão "clientes"
-        $aux = session('cidades');
+        if ($request->porte != null) {
+            if ($request->porte == 1) {
+                $porte = 'Pequeno';
+            } else if ($request->porte == 2) {
+                $porte = 'Médio';
+            } else {
+                $porte = 'Grande';
+            }
+            $alterado = [
+                'id' => $id,
+                'nome' => $request->nome,
+                'porte' => $porte
+            ];
+            // Obtém os dados da variável de sessão "clientes"
+            $aux = session('cidades');
 
-        // Obtém o índice do array "$aux" onde está o "$id" buscado
-        $indice = array_search($id, array_column($aux, 'id'));
+            // Obtém o índice do array "$aux" onde está o "$id" buscado
+            $indice = array_search($id, array_column($aux, 'id'));
 
-        // Substitui os dados do cliente com as novas informações
-        $aux[$indice] = $alterado;
+            // Substitui os dados do cliente com as novas informações
+            $aux[$indice] = $alterado;
 
-        // Atualiza a sessão com a nova alteração
-        session(['cidades' => $aux]);
+            // Atualiza a sessão com a nova alteração
+            session(['cidades' => $aux]);
+        }
 
         // redireciona para lista de clientes
         return redirect()->route('cidade.index');
